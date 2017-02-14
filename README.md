@@ -8,7 +8,7 @@ This plugin integrates this editor into your penguin.js based website.
 
 	$ npm i -S penguin-medium-editor
 
-Then edit your `package.json` file to include the component and embed the middleware.
+Then edit your `package.json` file to include the component.
 
 ```json
 {
