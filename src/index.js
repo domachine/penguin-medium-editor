@@ -41,6 +41,7 @@ export function render ({ field, innerHTML, store }) {
 }
 
 export function mount (props, el) {
+  if (props.store.getState().isBuilt) return
   const nonOpts = ['field', 'theme', 'save', 'destroy']
   const { field, theme = 'default' } = props
   let {
