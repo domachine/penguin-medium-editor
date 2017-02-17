@@ -1,6 +1,6 @@
 {
   "name": "penguin-medium-editor",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Integrate https://github.com/yabwe/medium-editor/ with penguin.js",
   "module": "index.js",
   "scripts": {
