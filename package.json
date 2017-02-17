@@ -2,7 +2,7 @@
   "name": "penguin-medium-editor",
   "version": "0.1.0",
   "description": "Integrate https://github.com/yabwe/medium-editor/ with penguin.js",
-  "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "rollup -w -c rollup.config.js -o index.js src/index.js",

@@ -1,4 +1,4 @@
-import { update } from 'penguin.js/actions'
+import { update } from 'penguin.js'
 import xtend from 'xtend'
 
 const mountStyles = theme => {
@@ -31,7 +31,7 @@ const mountScriptAndStyles = (theme, fn) => {
   document.getElementsByTagName('head')[0].appendChild(script)
 }
 
-export function render ({ field, innerHTML, store }) {
+export function render ({ store }, { field, innerHTML }) {
   let {
     fields: {
       [field]: value = (innerHTML || '')
@@ -40,16 +40,20 @@ export function render ({ field, innerHTML, store }) {
   return value
 }
 
-export function mount (props, el) {
+export function mount ({ store }, props, el) {
   if (process.env.PENGUIN_ENV === 'production') return
-  const nonOpts = ['field', 'theme', 'save', 'destroy']
+  const nonOpts = ['field', 'theme']
   const { field, theme = 'default' } = props
-  let {
-    fields: {
-      [field]: innerHTML = (props.innerHTML || '')
-    }
-  } = props.store.getState()
-  if (el.innerHTML !== innerHTML) el.innerHTML = innerHTML
+  const refresh = () => {
+    let {
+      fields: {
+        [field]: innerHTML = (props.innerHTML || '')
+      }
+    } = store.getState()
+    if (el.innerHTML !== innerHTML) el.innerHTML = innerHTML
+  }
+  store.subscribe(refresh)
+  refresh()
   mountScriptAndStyles(theme, () => {
     const opts =
       Object.keys(props)
@@ -57,7 +61,7 @@ export function mount (props, el) {
         .reduce((opts, k) => xtend({}, opts, { [k]: props[k] }), {})
     const editor = new window.MediumEditor([el], opts)
     editor.subscribe('editableInput', (e, el) => {
-      props.store.dispatch(update({ [field]: el.innerHTML }))
+      store.dispatch(update({ [field]: el.innerHTML }))
     })
   })
 }
