@@ -26,7 +26,7 @@ const mountScriptAndStyles = (theme, fn) => {
   const el = document.querySelector('script#medium-editor-script')
   if (el) {
     if (window.MediumEditor) fn()
-    else el.onload = fn
+    else el.addEventListener('load', fn)
     return
   }
   mountStyles(theme)
@@ -34,7 +34,7 @@ const mountScriptAndStyles = (theme, fn) => {
   script.setAttribute('id', 'medium-editor-script')
   script.type = 'text/javascript'
   script.async = true
-  script.onload = fn
+  script.addEventListener('load', fn)
   script.src = 'https://cdnjs.cloudflare.com/ajax/libs/medium-editor/5.22.2/js/medium-editor.min.js'
   document.getElementsByTagName('head')[0].appendChild(script)
 }
