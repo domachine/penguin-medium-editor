@@ -3,6 +3,8 @@ import xtend from 'xtend'
 
 const mountStyles = theme => {
   ;(() => {
+    const el = document.querySelector('link#medium-editor-style')
+    if (el) return
     const link = document.createElement('link')
     link.setAttribute('id', 'medium-editor-style')
     link.href = 'https://cdnjs.cloudflare.com/ajax/libs/medium-editor/5.22.2/css/medium-editor.min.css'
@@ -10,6 +12,8 @@ const mountStyles = theme => {
     document.getElementsByTagName('head')[0].appendChild(link)
   })()
   ;(() => {
+    const el = document.querySelector('link#medium-editor-theme')
+    if (el) return
     const link = document.createElement('link')
     link.setAttribute('id', 'medium-editor-theme')
     link.href = `https://cdnjs.cloudflare.com/ajax/libs/medium-editor/5.22.2/css/themes/${theme}.min.css`
@@ -20,10 +24,14 @@ const mountStyles = theme => {
 
 const mountScriptAndStyles = (theme, fn) => {
   const el = document.querySelector('script#medium-editor-script')
-  if (el) return fn()
+  if (el) {
+    if (window.MediumEditor) fn()
+    else el.onload = fn
+    return
+  }
   mountStyles(theme)
   const script = document.createElement('script')
-  script.setAttribute('id', 'filestack-script')
+  script.setAttribute('id', 'medium-editor-script')
   script.type = 'text/javascript'
   script.async = true
   script.onload = fn
