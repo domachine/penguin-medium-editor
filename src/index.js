@@ -1,6 +1,8 @@
 import { update } from 'penguin.js'
 import xtend from 'xtend'
 
+const defaultCreate = (...args) => new window.MediumEditor(...args)
+
 const mountStyles = theme => {
   ;(() => {
     const el = document.querySelector('link#medium-editor-style')
@@ -51,7 +53,7 @@ export function render ({ store }, { field, innerHTML }) {
 export function mount ({ store }, props, el) {
   if (process.env.PENGUIN_ENV === 'production') return
   const nonOpts = ['field', 'theme']
-  const { field, theme = 'default' } = props
+  const { field, theme = 'default', create = defaultCreate } = props
   const refresh = () => {
     let {
       fields: {
@@ -67,7 +69,7 @@ export function mount ({ store }, props, el) {
       Object.keys(props)
         .filter(k => nonOpts.indexOf(k) === -1)
         .reduce((opts, k) => xtend({}, opts, { [k]: props[k] }), {})
-    const editor = new window.MediumEditor([el], opts)
+    const editor = create([el], opts)
     editor.subscribe('editableInput', (e, el) => {
       store.dispatch(update({ [field]: el.innerHTML }))
     })
